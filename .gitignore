@@ -1,0 +1,9 @@
+# Exclude original .mov files (too large for GitHub)
+*.mov
+
+# Mac system files
+.DS_Store
+
+# Dev files
+CLAUDE.md
+SKILL.md
