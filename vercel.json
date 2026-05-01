@@ -1,7 +1,11 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/mentorship", "destination": "/mentorship.html" },
-    { "source": "/mentorship/", "destination": "/mentorship.html" }
+  "version": 2,
+  "builds": [
+    { "src": "**/*", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/mentorship/?", "dest": "/mentorship.html" },
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
