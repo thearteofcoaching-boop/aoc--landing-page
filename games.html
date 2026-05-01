@@ -381,6 +381,13 @@
     video.controls = true;
     video.play();
   }
+  function playSneak() {
+    var video = document.getElementById('sneak-video');
+    var overlay = document.getElementById('sneak-overlay');
+    overlay.style.display = 'none';
+    video.controls = true;
+    video.play();
+  }
   </script>
 
   <!-- ③ TESTIMONIALS — staggered masonry grid -->
@@ -598,34 +605,66 @@
     </div>
   </section>
 
-  <!-- ⑥ GAME IMAGES -->
-  <section style="background:#080F1A;padding:100px 24px;">
-    <div style="max-width:1100px;margin:0 auto;">
-      <div style="text-align:center;margin-bottom:56px;">
+  <!-- ⑥ SNEAK PEEK -->
+  <section style="background:#080F1A;padding:100px 24px;position:relative;overflow:hidden;">
+    <!-- Background dot grid texture -->
+    <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.04) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;"></div>
+    <!-- Cyan glow -->
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(62,207,238,0.07) 0%,transparent 70%);pointer-events:none;"></div>
+
+    <div style="max-width:1000px;margin:0 auto;position:relative;z-index:1;">
+
+      <!-- Headline -->
+      <div style="text-align:center;margin-bottom:60px;">
         <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:20px;">
           <span class="accent-line" style="width:30px;"></span>
-          <span style="color:#E91E8C;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;">From the mat</span>
+          <span style="color:#E91E8C;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;">Sneak peek</span>
           <span class="accent-line" style="margin-left:0;margin-right:0;width:30px;"></span>
         </div>
-        <h2 style="color:white;font-weight:900;font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.15;margin:0;letter-spacing:-0.02em;">
-          See the games in action
+        <h2 style="color:white;font-weight:900;font-size:clamp(1.8rem,4.5vw,3rem);line-height:1.1;margin:0 0 16px;letter-spacing:-0.02em;">
+          Here's <span style="color:#3ECFEE;">everything</span> you get inside<br/>Game-Based Kids BJJ
         </h2>
+        <p style="color:rgba(255,255,255,0.45);font-size:1rem;max-width:480px;margin:0 auto;">
+          15+ games. Two complete systems. Drop them straight into your next class.
+        </p>
       </div>
 
-      <div class="gallery-grid" style="height:560px;">
-        <div class="gallery-item gallery-item--tall">
-          <img class="gallery-img" src="https://images.unsplash.com/photo-1555597673-b21d5c935865?w=600&auto=format&fit=crop" alt="Kids BJJ class" />
-        </div>
-        <div class="gallery-item">
-          <img class="gallery-img" src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=600&auto=format&fit=crop" alt="Kids martial arts" />
-        </div>
-        <div class="gallery-item gallery-item--tall">
-          <img class="gallery-img" src="https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a?w=600&auto=format&fit=crop" alt="BJJ training" />
-        </div>
-        <div class="gallery-item">
-          <img class="gallery-img" src="https://images.unsplash.com/photo-1517438322307-e67111335449?w=600&auto=format&fit=crop" alt="Martial arts kids" />
+      <!-- Device mockup with video -->
+      <div style="position:relative;max-width:860px;margin:0 auto;">
+
+        <!-- Outer glow -->
+        <div style="position:absolute;inset:-2px;border-radius:26px;background:linear-gradient(135deg,rgba(62,207,238,0.3),rgba(233,30,140,0.15),rgba(62,207,238,0.1));z-index:0;filter:blur(1px);"></div>
+
+        <!-- Device frame -->
+        <div style="position:relative;z-index:1;background:#0A1628;border-radius:24px;border:1px solid rgba(255,255,255,0.10);overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.7);">
+
+          <!-- Fake browser chrome bar -->
+          <div style="background:#111E2D;padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.06);">
+            <div style="display:flex;gap:6px;">
+              <div style="width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,0.12);"></div>
+              <div style="width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,0.12);"></div>
+              <div style="width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,0.12);"></div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:6px;height:24px;display:flex;align-items:center;padding:0 12px;">
+              <span style="color:rgba(255,255,255,0.25);font-size:0.72rem;font-family:monospace;">thearteofcoaching.com.au/games</span>
+            </div>
+          </div>
+
+          <!-- Video inside the device -->
+          <div style="position:relative;">
+            <video id="sneak-video" preload="metadata" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
+              <source src="sneak_peek_promo.mp4" type="video/mp4">
+            </video>
+            <div id="sneak-overlay" onclick="playSneak()" style="position:absolute;inset:0;background:rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;cursor:pointer;transition:background 0.2s;">
+              <div style="width:72px;height:72px;border-radius:50%;background:#3ECFEE;display:flex;align-items:center;justify-content:center;padding-left:5px;box-shadow:0 8px 40px rgba(62,207,238,0.55);transition:transform 0.2s;">
+                <svg viewBox="0 0 24 24" fill="#0A1628" width="28" height="28"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <span style="color:rgba(255,255,255,0.75);font-size:0.82rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;">Watch the sneak peek</span>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
   </section>
 
