@@ -257,22 +257,12 @@
 
   <!-- ② VSL ───────────────────────────────────────────────────── -->
   <section id="vsl" style="background:#0D1B2A;padding:0 24px 100px;">
-    <div class="vsl-wrap" id="vsl-container">
-      <!-- Branded facade — replaced by iframe on click -->
-      <div id="vsl-facade" style="position:relative;width:100%;aspect-ratio:16/9;cursor:pointer;display:block;" onclick="loadVSL()">
-        <img
-          src="https://img.youtube.com/vi/sWs4UCYA7eY/maxresdefault.jpg"
-          alt="Watch the video"
-          style="width:100%;height:100%;object-fit:cover;display:block;" />
-        <!-- dark overlay -->
-        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.32);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
-          <button class="vsl-play-btn" aria-label="Play" style="pointer-events:none;">
-            <svg viewBox="0 0 24 24" fill="white" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
-          </button>
-          <span style="color:rgba(255,255,255,0.7);font-size:0.85rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;">Watch the full video</span>
-        </div>
+    <div class="vsl-wrap">
+      <div style="padding:56.25% 0 0 0;position:relative;">
+        <iframe src="https://player.vimeo.com/video/1141000414?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" title="The Arte of Coaching"></iframe>
       </div>
     </div>
+    <script src="https://player.vimeo.com/api/player.js"></script>
     <!-- CTA below VSL -->
     <div style="text-align:center;margin-top:40px;">
       <a href="#apply" class="btn-lift" style="display:inline-flex;align-items:center;gap:10px;background:#3ECFEE;color:#0A1628;font-weight:800;font-size:1rem;padding:16px 40px;border-radius:999px;text-decoration:none;letter-spacing:-0.01em;">
