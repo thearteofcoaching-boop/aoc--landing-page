@@ -118,6 +118,7 @@
       padding: 32px 28px;
       position: relative; overflow: hidden;
       transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      display: flex; flex-direction: column;
     }
     .game-card::before {
       content: '';
@@ -511,9 +512,11 @@
 
         <!-- System 1 -->
         <div class="game-card">
-          <div class="game-tag">System 01</div>
-          <h3 style="color:white;font-weight:900;font-size:1.4rem;margin:0 0 8px;letter-spacing:-0.02em;">The Fairytale System</h3>
-          <p style="color:rgba(255,255,255,0.45);font-size:0.875rem;line-height:1.7;margin:0 0 24px;">A complete themed learning system that builds guard, connection, and positional awareness through storytelling and play.</p>
+          <div style="flex:1;">
+            <div class="game-tag">System 01</div>
+            <h3 style="color:white;font-weight:900;font-size:1.4rem;margin:0 0 8px;letter-spacing:-0.02em;">The Fairytale System</h3>
+            <p style="color:rgba(255,255,255,0.45);font-size:0.875rem;line-height:1.7;margin:0 0 24px;">A complete themed learning system that builds guard, connection, and positional awareness through storytelling and play.</p>
+          </div>
           <div>
             <div class="game-item"><span class="game-dot"></span>Dragon Tamer</div>
             <div class="game-item"><span class="game-dot"></span>Lock the Dragon</div>
@@ -532,9 +535,11 @@
 
         <!-- System 2 -->
         <div class="game-card">
-          <div class="game-tag">System 02</div>
-          <h3 style="color:white;font-weight:900;font-size:1.4rem;margin:0 0 8px;letter-spacing:-0.02em;">Takedown &amp; Back Control</h3>
-          <p style="color:rgba(255,255,255,0.45);font-size:0.875rem;line-height:1.7;margin:0 0 24px;">A progressive framework that builds stand-up confidence and back control through live, problem-based scenarios.</p>
+          <div style="flex:1;">
+            <div class="game-tag">System 02</div>
+            <h3 style="color:white;font-weight:900;font-size:1.4rem;margin:0 0 8px;letter-spacing:-0.02em;">Takedown &amp; Back Control</h3>
+            <p style="color:rgba(255,255,255,0.45);font-size:0.875rem;line-height:1.7;margin:0 0 24px;">A progressive framework that builds stand-up confidence and back control through live, problem-based scenarios.</p>
+          </div>
           <div>
             <div class="game-item"><span class="game-dot"></span>The Clap Game</div>
             <div class="game-item"><span class="game-dot"></span>Backpack Battle</div>
