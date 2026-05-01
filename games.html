@@ -57,7 +57,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
-      align-items: start;
+      align-items: stretch;
     }
     .tblock {
       background: linear-gradient(145deg, #121F30 0%, #0D1926 100%);
@@ -66,6 +66,9 @@
       padding: 28px 24px;
       position: relative;
       margin-top: 0 !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .tblock:hover {
