@@ -257,15 +257,21 @@
 
   <!-- ② VSL ───────────────────────────────────────────────────── -->
   <section id="vsl" style="background:#0D1B2A;padding:0 24px 100px;">
-    <div class="vsl-wrap">
-      <iframe
-        src="https://www.youtube.com/embed/sWs4UCYA7eY?rel=0&modestbranding=1&color=white"
-        title="The Mentorship – Video Sales Letter"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        style="width:100%;aspect-ratio:16/9;display:block;border:none;">
-      </iframe>
+    <div class="vsl-wrap" id="vsl-container">
+      <!-- Branded facade — replaced by iframe on click -->
+      <div id="vsl-facade" style="position:relative;width:100%;aspect-ratio:16/9;cursor:pointer;display:block;" onclick="loadVSL()">
+        <img
+          src="https://img.youtube.com/vi/sWs4UCYA7eY/maxresdefault.jpg"
+          alt="Watch the video"
+          style="width:100%;height:100%;object-fit:cover;display:block;" />
+        <!-- dark overlay -->
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.32);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+          <button class="vsl-play-btn" aria-label="Play" style="pointer-events:none;">
+            <svg viewBox="0 0 24 24" fill="white" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <span style="color:rgba(255,255,255,0.7);font-size:0.85rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;">Watch the full video</span>
+        </div>
+      </div>
     </div>
     <!-- CTA below VSL -->
     <div style="text-align:center;margin-top:40px;">
@@ -665,12 +671,17 @@
   </footer>
 
   <script>
-  function playVSL() {
-    var video = document.getElementById('vsl-video');
-    var overlay = document.getElementById('vsl-overlay');
-    overlay.classList.add('hidden');
-    video.controls = true;
-    video.play();
+  function loadVSL() {
+    var facade = document.getElementById('vsl-facade');
+    var container = document.getElementById('vsl-container');
+    facade.style.display = 'none';
+    var iframe = document.createElement('iframe');
+    iframe.src = 'https://www.youtube.com/embed/sWs4UCYA7eY?rel=0&modestbranding=1&autoplay=1&color=white&iv_load_policy=3';
+    iframe.title = 'The Mentorship';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.style.cssText = 'width:100%;aspect-ratio:16/9;display:block;border:none;';
+    container.appendChild(iframe);
   }
   function playVideo(overlay) {
     var video = overlay.previousElementSibling;
