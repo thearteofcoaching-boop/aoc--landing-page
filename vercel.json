@@ -2,6 +2,8 @@
   "rewrites": [
     { "source": "/mentorship", "destination": "/mentorship.html" },
     { "source": "/mentorship/", "destination": "/mentorship.html" },
+    { "source": "/games", "destination": "/games.html" },
+    { "source": "/games/", "destination": "/games.html" },
     { "source": "/", "destination": "/index.html" }
   ]
 }
