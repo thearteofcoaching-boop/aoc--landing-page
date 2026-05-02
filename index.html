@@ -671,12 +671,7 @@
     document.getElementById('popup-backdrop').classList.remove('open');
   }
   function submitToAweber(email) {
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://www.aweber.com/scripts/addlead.pl';
-    form.target = 'aweber-hidden-iframe';
-    form.style.display = 'none';
-    var fields = {
+    var params = new URLSearchParams({
       'meta_web_form_id': '262449255',
       'meta_adtracking': 'My_Web_Form',
       'meta_required': 'email',
@@ -685,17 +680,13 @@
       'meta_redirect_onlist': 'https://www.aweber.com/thankyou.htm?m=default',
       'email': email,
       'name': 'Subscriber'
-    };
-    for (var key in fields) {
-      var input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = fields[key];
-      form.appendChild(input);
-    }
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
+    });
+    fetch('https://www.aweber.com/scripts/addlead.pl', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
+    });
   }
 
   function submitPopup() {
@@ -729,6 +720,5 @@
     video.play();
   }
   </script>
-  <iframe name="aweber-hidden-iframe" style="display:none;" aria-hidden="true"></iframe>
 </body>
 </html>
