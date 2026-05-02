@@ -291,8 +291,17 @@
       </p>
 
       <!-- Form -->
-      <input id="popup-email-input" type="email" placeholder="Enter your email address" />
-      <button id="popup-submit" onclick="submitPopup()">Send Me the Blueprint</button>
+      <form method="post" action="https://www.aweber.com/scripts/addlead.pl" style="display:flex;flex-direction:column;gap:12px;">
+        <input type="hidden" name="meta_web_form_id" value="262449255" />
+        <input type="hidden" name="meta_adtracking" value="My_Web_Form" />
+        <input type="hidden" name="meta_required" value="name,email" />
+        <input type="hidden" name="listname" value="awlist6934166" />
+        <input type="hidden" name="redirect" value="https://thearteofcoaching.com.au/" />
+        <input type="hidden" name="meta_redirect_onlist" value="https://thearteofcoaching.com.au/" />
+        <input type="text" name="name" placeholder="Your first name" required style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.07);color:white;font-size:0.95rem;font-family:inherit;outline:none;box-sizing:border-box;" />
+        <input type="email" name="email" placeholder="Enter your email address" required style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.07);color:white;font-size:0.95rem;font-family:inherit;outline:none;box-sizing:border-box;" />
+        <button type="submit" id="popup-submit">Send Me the Blueprint</button>
+      </form>
 
       <!-- Trust note -->
       <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;text-align:center;margin:14px 0 0;">
@@ -670,34 +679,6 @@
   function closePopup() {
     document.getElementById('popup-backdrop').classList.remove('open');
   }
-  function submitToAweber(email) {
-    var params = new URLSearchParams({
-      'meta_web_form_id': '262449255',
-      'meta_adtracking': 'My_Web_Form',
-      'meta_required': 'email',
-      'listname': 'awlist6934166',
-      'redirect': 'https://www.aweber.com/thankyou.htm?m=default',
-      'meta_redirect_onlist': 'https://www.aweber.com/thankyou.htm?m=default',
-      'email': email,
-      'name': 'Subscriber'
-    });
-    fetch('https://www.aweber.com/scripts/addlead.pl', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString()
-    });
-  }
-
-  function submitPopup() {
-    var email = document.getElementById('popup-email-input').value;
-    if (!email || !email.includes('@')) {
-      document.getElementById('popup-email-input').style.borderColor = '#E91E8C';
-      return;
-    }
-    submitToAweber(email);
-    document.getElementById('popup-box').innerHTML = '<div style="text-align:center;padding:20px 0;"><div style="font-size:2.5rem;margin-bottom:16px;">🎉</div><h2 style="color:white;font-weight:900;font-size:1.4rem;margin:0 0 10px;">You\'re in!</h2><p style="color:rgba(255,255,255,0.5);font-size:0.9rem;line-height:1.6;margin:0;">Check your inbox — the blueprint is on its way.</p><button onclick="closePopup()" style="margin-top:28px;padding:12px 32px;background:#E91E8C;color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;">Back to the Page</button></div>';
-  }
   // Trigger popup 4 seconds after intro finishes
   setTimeout(openPopup, 8500);
 
@@ -707,7 +688,6 @@
       input.style.borderColor = '#E91E8C';
       return;
     }
-    submitToAweber(input.value);
     input.style.display = 'none';
     input.nextElementSibling.style.display = 'none';
     document.getElementById('section-success').style.display = 'block';
