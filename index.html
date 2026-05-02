@@ -670,12 +670,37 @@
   function closePopup() {
     document.getElementById('popup-backdrop').classList.remove('open');
   }
+  function submitToAweber(email) {
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://www.aweber.com/scripts/addlead.pl';
+    form.target = 'aweber-hidden-iframe';
+    form.style.display = 'none';
+    var fields = {
+      'listname': 'awlist6934166',
+      'redirect': 'https://thearteofcoaching.com.au/',
+      'meta_redirect_onlist': 'https://thearteofcoaching.com.au/',
+      'email': email
+    };
+    for (var key in fields) {
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = fields[key];
+      form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
+
   function submitPopup() {
     var email = document.getElementById('popup-email-input').value;
     if (!email || !email.includes('@')) {
       document.getElementById('popup-email-input').style.borderColor = '#E91E8C';
       return;
     }
+    submitToAweber(email);
     document.getElementById('popup-box').innerHTML = '<div style="text-align:center;padding:20px 0;"><div style="font-size:2.5rem;margin-bottom:16px;">🎉</div><h2 style="color:white;font-weight:900;font-size:1.4rem;margin:0 0 10px;">You\'re in!</h2><p style="color:rgba(255,255,255,0.5);font-size:0.9rem;line-height:1.6;margin:0;">Check your inbox — the blueprint is on its way.</p><button onclick="closePopup()" style="margin-top:28px;padding:12px 32px;background:#E91E8C;color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;">Back to the Page</button></div>';
   }
   // Trigger popup 4 seconds after intro finishes
@@ -687,6 +712,7 @@
       input.style.borderColor = '#E91E8C';
       return;
     }
+    submitToAweber(input.value);
     input.style.display = 'none';
     input.nextElementSibling.style.display = 'none';
     document.getElementById('section-success').style.display = 'block';
@@ -699,5 +725,6 @@
     video.play();
   }
   </script>
+  <iframe name="aweber-hidden-iframe" style="display:none;" aria-hidden="true"></iframe>
 </body>
 </html>
