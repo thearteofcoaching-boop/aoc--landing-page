@@ -619,10 +619,15 @@
         </p>
 
         <!-- Form -->
-        <div style="display:flex;gap:12px;max-width:480px;margin:0 auto;">
-          <input id="section-email-input" type="email" placeholder="Enter your email address"
-            style="flex:1;padding:15px 18px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:white;font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.2s;"
-            onfocus="this.style.borderColor='#E91E8C'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'" />
+        <div style="display:flex;flex-direction:column;gap:12px;max-width:480px;margin:0 auto;">
+          <div style="display:flex;gap:12px;">
+            <input id="section-name-input" type="text" placeholder="Your first name"
+              style="flex:1;padding:15px 18px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:white;font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.2s;"
+              onfocus="this.style.borderColor='#E91E8C'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'" />
+            <input id="section-email-input" type="email" placeholder="Enter your email address"
+              style="flex:2;padding:15px 18px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:white;font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.2s;"
+              onfocus="this.style.borderColor='#E91E8C'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'" />
+          </div>
           <button onclick="submitSectionEmail()" class="btn-lift"
             style="padding:15px 28px;background:#E91E8C;color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;">
             Send It to Me
@@ -674,37 +679,38 @@
 
   // Popup — opens 4s after page becomes visible
   function openPopup() {
+    if (localStorage.getItem('aoc_subscribed')) return;
     document.getElementById('popup-backdrop').classList.add('open');
   }
   function closePopup() {
     document.getElementById('popup-backdrop').classList.remove('open');
+  }
+  function submitToAweber(name, email) {
+    document.getElementById('aw-name').value = name;
+    document.getElementById('aw-email').value = email;
+    document.getElementById('aw-hidden-form').submit();
+    localStorage.setItem('aoc_subscribed', '1');
   }
   function submitPopup() {
     var name = document.getElementById('popup-name-input').value.trim();
     var email = document.getElementById('popup-email-input').value.trim();
     if (!name) { document.getElementById('popup-name-input').style.borderColor = '#E91E8C'; return; }
     if (!email || !email.includes('@')) { document.getElementById('popup-email-input').style.borderColor = '#E91E8C'; return; }
-    // Fill hidden AWeber form and submit to hidden iframe
-    document.getElementById('aw-name').value = name;
-    document.getElementById('aw-email').value = email;
-    document.getElementById('aw-hidden-form').submit();
-    // Show success message
+    submitToAweber(name, email);
     document.getElementById('popup-form').style.display = 'none';
     document.getElementById('popup-success').style.display = 'block';
   }
-  // Trigger popup after intro finishes
-  setTimeout(openPopup, 8500);
-
   function submitSectionEmail() {
-    var input = document.getElementById('section-email-input');
-    if (!input.value || !input.value.includes('@')) {
-      input.style.borderColor = '#E91E8C';
-      return;
-    }
-    input.style.display = 'none';
-    input.nextElementSibling.style.display = 'none';
+    var name = document.getElementById('section-name-input').value.trim();
+    var email = document.getElementById('section-email-input').value.trim();
+    if (!name) { document.getElementById('section-name-input').style.borderColor = '#E91E8C'; return; }
+    if (!email || !email.includes('@')) { document.getElementById('section-email-input').style.borderColor = '#E91E8C'; return; }
+    submitToAweber(name, email);
+    document.getElementById('section-name-input').closest('div').parentElement.style.display = 'none';
     document.getElementById('section-success').style.display = 'block';
   }
+  // Trigger popup after intro finishes
+  setTimeout(openPopup, 8500);
 
   function playVideo(overlay) {
     var video = overlay.previousElementSibling;
