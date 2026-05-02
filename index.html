@@ -262,6 +262,12 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     #popup-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(233,30,140,0.4); }
+    .test-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .test-block { display:flex; flex-direction:column; gap:16px; }
+    @media (max-width: 767px) {
+      .proof-hide-mobile { display: none !important; }
+      .test-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body class="font-sans antialiased">
@@ -342,15 +348,15 @@
               <img src="https://i.pravatar.cc/40?img=11" style="width:36px;height:36px;border-radius:50%;border:2px solid #0D1B2A;object-fit:cover;margin-right:-10px;" alt="" />
               <img src="https://i.pravatar.cc/40?img=32" style="width:36px;height:36px;border-radius:50%;border:2px solid #0D1B2A;object-fit:cover;margin-right:-10px;" alt="" />
               <img src="https://i.pravatar.cc/40?img=47" style="width:36px;height:36px;border-radius:50%;border:2px solid #0D1B2A;object-fit:cover;margin-right:-10px;" alt="" />
-              <img src="https://i.pravatar.cc/40?img=15" style="width:36px;height:36px;border-radius:50%;border:2px solid #0D1B2A;object-fit:cover;margin-right:-10px;" alt="" />
-              <img src="https://i.pravatar.cc/40?img=28" style="width:36px;height:36px;border-radius:50%;border:2px solid #0D1B2A;object-fit:cover;" alt="" />
+              <img src="https://i.pravatar.cc/40?img=15" class="proof-hide-mobile" style="width:36px;height:36px;border-radius:50%;border:2px solid #0D1B2A;object-fit:cover;margin-right:-10px;" alt="" />
+              <img src="https://i.pravatar.cc/40?img=28" class="proof-hide-mobile" style="width:36px;height:36px;border-radius:50%;border:2px solid #0D1B2A;object-fit:cover;" alt="" />
             </div>
             <div style="text-align:left;">
               <div style="display:flex;align-items:center;gap:6px;">
                 <span style="color:#F7C948;font-size:13px;">★★★★★</span>
                 <span style="color:white;font-weight:700;font-size:14px;">Trusted by 400+ coaches</span>
               </div>
-              <p style="color:rgba(255,255,255,0.5);font-size:12px;margin:2px 0 0;">Kids BJJ coaches from around the world</p>
+              <p class="proof-hide-mobile" style="color:rgba(255,255,255,0.5);font-size:12px;margin:2px 0 0;">Kids BJJ coaches from around the world</p>
             </div>
           </div>
         </div>
@@ -466,82 +472,58 @@
         </h2>
         <p style="color:rgba(255,255,255,0.45);text-align:center;font-size:1rem;margin:0 0 56px;">Real coaches. Real results.</p>
 
-        <!-- Quote cards grid — stretch makes all cards the same height -->
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch;margin-bottom:16px;">
-          <div class="quote-card" style="align-items:flex-start;">
-            <p style="color:#1a2a3a;font-size:0.9rem;line-height:1.7;margin:0;font-style:italic;">"She's currently the best kids coach I've seen right now. She's the best person in the field by far."</p>
-          </div>
-          <div class="quote-card" style="align-items:flex-start;">
-            <p style="color:#1a2a3a;font-size:0.9rem;line-height:1.7;margin:0;font-style:italic;">"From the very beginning of the process to all the way to the end, her framework and her general enthusiasm for helping us improve our program has been second to none."</p>
-          </div>
-          <div class="quote-card" style="align-items:flex-start;">
-            <p style="color:#1a2a3a;font-size:0.9rem;line-height:1.7;margin:0;font-style:italic;">"It was an amazing journey working with Ellee. She made me a lot more confident working with kids. Honestly, I think she should be a black belt when it comes to kids coaching."</p>
-          </div>
-          <div class="quote-card" style="align-items:flex-start;">
-            <p style="color:#1a2a3a;font-size:0.9rem;line-height:1.7;margin:0;font-style:italic;">"I can't tell you how much I appreciate this program. Working with you in this mentorship, I just want to tell you, I really appreciate this."</p>
-          </div>
-        </div>
-
-        <!-- Videos grid -->
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
-          <div class="vid-col">
-            <div class="vid-wrap">
-              <video preload="metadata" style="object-position: center center;">
-                <source src="greg_testimonial.mp4" type="video/mp4">
-              </video>
-              <div class="vid-overlay" onclick="playVideo(this)">
-                <button class="play-btn" aria-label="Play">
-                  <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M8 5v14l11-7z"/></svg>
-                </button>
-              </div>
+        <div class="test-grid">
+          <div class="test-block">
+            <div class="quote-card" style="align-items:flex-start;flex:1;">
+              <p style="color:#1a2a3a;font-size:0.9rem;line-height:1.7;margin:0;font-style:italic;">"She's currently the best kids coach I've seen right now. She's the best person in the field by far."</p>
             </div>
-            <div class="vid-name">Greg Souders</div>
-            <div class="vid-role">Kids BJJ Coach</div>
-          </div>
-
-          <div class="vid-col">
-            <div class="vid-wrap">
-              <video preload="metadata">
-                <source src="ryan_testimonial.mp4" type="video/mp4">
-              </video>
-              <div class="vid-overlay" onclick="playVideo(this)">
-                <button class="play-btn" aria-label="Play">
-                  <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M8 5v14l11-7z"/></svg>
-                </button>
+            <div class="vid-col">
+              <div class="vid-wrap">
+                <video preload="metadata" style="object-position:center center;"><source src="greg_testimonial.mp4" type="video/mp4"></video>
+                <div class="vid-overlay" onclick="playVideo(this)"><button class="play-btn" aria-label="Play"><svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M8 5v14l11-7z"/></svg></button></div>
               </div>
+              <div class="vid-name">Greg Souders</div>
+              <div class="vid-role">Kids BJJ Coach</div>
             </div>
-            <div class="vid-name">Ryan</div>
-            <div class="vid-role">Kids BJJ Coach</div>
           </div>
-
-          <div class="vid-col">
-            <div class="vid-wrap">
-              <video preload="metadata">
-                <source src="testimonial_from_moe.mp4" type="video/mp4">
-              </video>
-              <div class="vid-overlay" onclick="playVideo(this)">
-                <button class="play-btn" aria-label="Play">
-                  <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M8 5v14l11-7z"/></svg>
-                </button>
-              </div>
+          <div class="test-block">
+            <div class="quote-card" style="align-items:flex-start;flex:1;">
+              <p style="color:#1a2a3a;font-size:0.9rem;line-height:1.7;margin:0;font-style:italic;">"From the very beginning of the process to all the way to the end, her framework and her general enthusiasm for helping us improve our program has been second to none."</p>
             </div>
-            <div class="vid-name">Moe</div>
-            <div class="vid-role">Kids BJJ Coach</div>
+            <div class="vid-col">
+              <div class="vid-wrap">
+                <video preload="metadata"><source src="ryan_testimonial.mp4" type="video/mp4"></video>
+                <div class="vid-overlay" onclick="playVideo(this)"><button class="play-btn" aria-label="Play"><svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M8 5v14l11-7z"/></svg></button></div>
+              </div>
+              <div class="vid-name">Ryan</div>
+              <div class="vid-role">Kids BJJ Coach</div>
+            </div>
           </div>
-
-          <div class="vid-col">
-            <div class="vid-wrap">
-              <video preload="metadata">
-                <source src="testimonial_mento.mp4" type="video/mp4">
-              </video>
-              <div class="vid-overlay" onclick="playVideo(this)">
-                <button class="play-btn" aria-label="Play">
-                  <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M8 5v14l11-7z"/></svg>
-                </button>
-              </div>
+          <div class="test-block">
+            <div class="quote-card" style="align-items:flex-start;flex:1;">
+              <p style="color:#1a2a3a;font-size:0.9rem;line-height:1.7;margin:0;font-style:italic;">"It was an amazing journey working with Ellee. She made me a lot more confident working with kids. Honestly, I think she should be a black belt when it comes to kids coaching."</p>
             </div>
-            <div class="vid-name">Gordon</div>
-            <div class="vid-role">Kids BJJ Coach</div>
+            <div class="vid-col">
+              <div class="vid-wrap">
+                <video preload="metadata"><source src="testimonial_from_moe.mp4" type="video/mp4"></video>
+                <div class="vid-overlay" onclick="playVideo(this)"><button class="play-btn" aria-label="Play"><svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M8 5v14l11-7z"/></svg></button></div>
+              </div>
+              <div class="vid-name">Moe</div>
+              <div class="vid-role">Kids BJJ Coach</div>
+            </div>
+          </div>
+          <div class="test-block">
+            <div class="quote-card" style="align-items:flex-start;flex:1;">
+              <p style="color:#1a2a3a;font-size:0.9rem;line-height:1.7;margin:0;font-style:italic;">"I can't tell you how much I appreciate this program. Working with you in this mentorship, I just want to tell you, I really appreciate this."</p>
+            </div>
+            <div class="vid-col">
+              <div class="vid-wrap">
+                <video preload="metadata"><source src="testimonial_mento.mp4" type="video/mp4"></video>
+                <div class="vid-overlay" onclick="playVideo(this)"><button class="play-btn" aria-label="Play"><svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M8 5v14l11-7z"/></svg></button></div>
+              </div>
+              <div class="vid-name">Gordon</div>
+              <div class="vid-role">Kids BJJ Coach</div>
+            </div>
           </div>
         </div>
       </div>
