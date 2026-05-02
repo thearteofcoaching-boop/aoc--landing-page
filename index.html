@@ -291,17 +291,17 @@
       </p>
 
       <!-- Form -->
-      <form method="post" action="https://www.aweber.com/scripts/addlead.pl" style="display:flex;flex-direction:column;gap:12px;">
-        <input type="hidden" name="meta_web_form_id" value="262449255" />
-        <input type="hidden" name="meta_adtracking" value="My_Web_Form" />
-        <input type="hidden" name="meta_required" value="name,email" />
-        <input type="hidden" name="listname" value="awlist6934166" />
-        <input type="hidden" name="redirect" value="https://thearteofcoaching.com.au/" />
-        <input type="hidden" name="meta_redirect_onlist" value="https://thearteofcoaching.com.au/" />
-        <input type="text" name="name" placeholder="Your first name" required style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.07);color:white;font-size:0.95rem;font-family:inherit;outline:none;box-sizing:border-box;" />
-        <input type="email" name="email" placeholder="Enter your email address" required style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.07);color:white;font-size:0.95rem;font-family:inherit;outline:none;box-sizing:border-box;" />
-        <button type="submit" id="popup-submit">Send Me the Blueprint</button>
-      </form>
+      <div id="popup-form" style="display:flex;flex-direction:column;gap:12px;">
+        <input id="popup-name-input" type="text" placeholder="Your first name" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.07);color:white;font-size:0.95rem;font-family:inherit;outline:none;box-sizing:border-box;" />
+        <input id="popup-email-input" type="email" placeholder="Enter your email address" style="width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.07);color:white;font-size:0.95rem;font-family:inherit;outline:none;box-sizing:border-box;" />
+        <button id="popup-submit" onclick="submitPopup()">Send Me the Blueprint</button>
+      </div>
+      <div id="popup-success" style="display:none;text-align:center;padding:20px 0;">
+        <div style="font-size:2.5rem;margin-bottom:16px;">🎉</div>
+        <h2 style="color:white;font-weight:900;font-size:1.4rem;margin:0 0 10px;">You're in!</h2>
+        <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;line-height:1.6;margin:0;">Check your inbox — the blueprint is on its way.</p>
+        <button onclick="closePopup()" style="margin-top:28px;padding:12px 32px;background:#E91E8C;color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;">Back to the Page</button>
+      </div>
 
       <!-- Trust note -->
       <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;text-align:center;margin:14px 0 0;">
@@ -679,7 +679,20 @@
   function closePopup() {
     document.getElementById('popup-backdrop').classList.remove('open');
   }
-  // Trigger popup 4 seconds after intro finishes
+  function submitPopup() {
+    var name = document.getElementById('popup-name-input').value.trim();
+    var email = document.getElementById('popup-email-input').value.trim();
+    if (!name) { document.getElementById('popup-name-input').style.borderColor = '#E91E8C'; return; }
+    if (!email || !email.includes('@')) { document.getElementById('popup-email-input').style.borderColor = '#E91E8C'; return; }
+    // Fill hidden AWeber form and submit to hidden iframe
+    document.getElementById('aw-name').value = name;
+    document.getElementById('aw-email').value = email;
+    document.getElementById('aw-hidden-form').submit();
+    // Show success message
+    document.getElementById('popup-form').style.display = 'none';
+    document.getElementById('popup-success').style.display = 'block';
+  }
+  // Trigger popup after intro finishes
   setTimeout(openPopup, 8500);
 
   function submitSectionEmail() {
@@ -700,5 +713,17 @@
     video.play();
   }
   </script>
+  <!-- Hidden AWeber form — submits in background, page never navigates -->
+  <iframe name="aw-iframe" style="display:none;" aria-hidden="true"></iframe>
+  <form id="aw-hidden-form" method="post" action="https://www.aweber.com/scripts/addlead.pl" target="aw-iframe" style="display:none;">
+    <input type="hidden" name="meta_web_form_id" value="262449255" />
+    <input type="hidden" name="meta_adtracking" value="My_Web_Form" />
+    <input type="hidden" name="meta_required" value="name,email" />
+    <input type="hidden" name="listname" value="awlist6934166" />
+    <input type="hidden" name="redirect" value="https://thearteofcoaching.com.au/" />
+    <input type="hidden" name="meta_redirect_onlist" value="https://thearteofcoaching.com.au/" />
+    <input type="hidden" id="aw-name" name="name" value="" />
+    <input type="hidden" id="aw-email" name="email" value="" />
+  </form>
 </body>
 </html>
