@@ -1,4 +1,3 @@
-const Anthropic = require('@anthropic-ai/sdk');
 const { Resend } = require('resend');
 
 const CATEGORY_MAX = {
@@ -161,17 +160,31 @@ module.exports = async function handler(req, res) {
       return { name: catName, pct, questions: data.questions };
     });
 
-    // Build prompt and call Claude
+    // Build prompt and call Claude via direct HTTP (no SDK)
     const prompt = buildPrompt(name, categoryResults);
 
-    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-    const message = await anthropic.messages.create({
-      model: 'claude-3-haiku-20240307',
-      max_tokens: 900,
-      messages: [{ role: 'user', content: prompt }],
+    const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-3-haiku-20240307',
+        max_tokens: 900,
+        messages: [{ role: 'user', content: prompt }],
+      }),
     });
 
-    const analysisText = message.content[0].text;
+    const claudeData = await claudeRes.json();
+    console.log('analyze: Claude status', claudeRes.status, JSON.stringify(claudeData).slice(0, 200));
+
+    if (!claudeRes.ok) {
+      throw new Error(`Claude API error: ${claudeRes.status} ${JSON.stringify(claudeData)}`);
+    }
+
+    const analysisText = claudeData.content[0].text;
     console.log('analyze: Claude response received, sending email');
 
     // Send email via Resend
