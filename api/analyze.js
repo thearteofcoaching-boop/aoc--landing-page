@@ -207,23 +207,7 @@ module.exports = async function handler(req, res) {
       html: buildEmailHTML(name, analysisText, categoryResults),
     });
 
-    // Submit to AWeber (fire and forget — don't block the response)
-    const aweberParams = new URLSearchParams({
-      meta_web_form_id: '262449255',
-      meta_adtracking: 'quiz-assessment',
-      meta_required: 'name,email',
-      listname: 'awlist6934166',
-      name,
-      email,
-      redirect: 'https://thearteofcoaching.com.au/',
-      meta_redirect_onlist: 'https://thearteofcoaching.com.au/',
-      submit: 'Submit',
-    });
-    fetch('https://www.aweber.com/scripts/addlead.pl', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: aweberParams.toString(),
-    }).then(r => console.log('AWeber response:', r.status)).catch(err => console.error('AWeber error:', err));
+    // AWeber is submitted from the browser (hidden form + iframe, same as main landing page)
 
     return res.status(200).json({ success: true });
 

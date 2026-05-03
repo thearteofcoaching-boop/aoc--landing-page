@@ -174,6 +174,19 @@
     </div>
   </div>
 
+  <!-- AWeber hidden form (same method as main landing page) -->
+  <iframe name="aw-iframe" style="display:none;" aria-hidden="true"></iframe>
+  <form id="aw-hidden-form" method="post" action="https://www.aweber.com/scripts/addlead.pl" target="aw-iframe" style="display:none;">
+    <input type="hidden" name="meta_web_form_id" value="262449255" />
+    <input type="hidden" name="meta_adtracking" value="quiz-assessment" />
+    <input type="hidden" name="meta_required" value="name,email" />
+    <input type="hidden" name="listname" value="awlist6934166" />
+    <input type="hidden" name="redirect" value="https://thearteofcoaching.com.au/" />
+    <input type="hidden" name="meta_redirect_onlist" value="https://thearteofcoaching.com.au/" />
+    <input type="hidden" id="aw-name" name="name" value="" />
+    <input type="hidden" id="aw-email" name="email" value="" />
+  </form>
+
   <!-- ── SCRIPT ─────────────────────────────────────────────────────────────── -->
   <script>
     // ── Questions ─────────────────────────────────────────────────────────────
@@ -468,6 +481,11 @@
 
       state.lastName = name;
       state.lastEmail = email;
+
+      // Submit to AWeber from browser (same method as main landing page)
+      document.getElementById('aw-name').value = name;
+      document.getElementById('aw-email').value = email;
+      document.getElementById('aw-hidden-form').submit();
 
       showScreen('screen-loading');
       startLoadingMessages();
