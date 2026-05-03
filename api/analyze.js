@@ -134,6 +134,8 @@ module.exports = async function handler(req, res) {
   try {
     const { name, email, answers } = req.body;
 
+    console.log('analyze: received request for', email);
+
     if (!name || !email || !Array.isArray(answers) || answers.length === 0) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
@@ -169,11 +171,12 @@ module.exports = async function handler(req, res) {
     });
 
     const analysisText = message.content[0].text;
+    console.log('analyze: Claude response received, sending email');
 
     // Send email via Resend
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'coaching@arteofcoaching.com',
+      from: process.env.FROM_EMAIL || 'coaching@thearteofcoaching.com.au',
       to: email,
       subject: `${name}, your BJJ coaching assessment is here`,
       html: buildEmailHTML(name, analysisText, categoryResults),
@@ -197,7 +200,9 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ success: true });
 
   } catch (err) {
-    console.error('analyze error:', err);
+    console.error('analyze error:', err.message || err);
+    console.error('analyze error status:', err.status);
+    console.error('analyze error body:', JSON.stringify(err.error || err.body || {}));
     return res.status(500).json({ error: 'Analysis failed. Please try again.' });
   }
 };

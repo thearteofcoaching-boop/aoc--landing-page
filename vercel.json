@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/analyze.js": {
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
     { "source": "/mentorship", "destination": "/mentorship.html" },
     { "source": "/mentorship/", "destination": "/mentorship.html" },
