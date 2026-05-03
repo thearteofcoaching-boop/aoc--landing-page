@@ -135,6 +135,7 @@ module.exports = async function handler(req, res) {
     const { name, email, answers } = req.body;
 
     console.log('analyze: received request for', email);
+    console.log('analyze: API key prefix:', (process.env.ANTHROPIC_API_KEY || '').slice(0, 16));
 
     if (!name || !email || !Array.isArray(answers) || answers.length === 0) {
       return res.status(400).json({ error: 'Missing required fields' });
