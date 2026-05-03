@@ -4,6 +4,8 @@
     { "source": "/mentorship/", "destination": "/mentorship.html" },
     { "source": "/games", "destination": "/games.html" },
     { "source": "/games/", "destination": "/games.html" },
+    { "source": "/quiz", "destination": "/quiz.html" },
+    { "source": "/quiz/", "destination": "/quiz.html" },
     { "source": "/", "destination": "/index.html" }
   ]
 }

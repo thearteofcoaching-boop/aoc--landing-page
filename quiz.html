@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BJJ Coaching Assessment — Arte of Coaching</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            navy: '#0D1B2A', pink: '#E91E8C',
+            cyan: '#6DD5ED', gold: '#F7C948', cream: '#F8F7F4',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html, body { margin: 0; padding: 0; min-height: 100vh; background: #0D1B2A; }
+
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: flex; }
+
+    .answer-btn { transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease; }
+    .answer-btn:hover { border-color: #E91E8C; transform: translateX(2px); }
+    .answer-btn.selected { border-color: #E91E8C; background: rgba(233,30,140,0.07); }
+    .answer-btn.selected .letter-badge { background: #E91E8C; color: white; }
+
+    .progress-fill { transition: width 0.4s ease; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.85s linear infinite; }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeSlideIn 0.32s ease forwards; }
+
+    .loading-msg { transition: opacity 0.25s ease; }
+
+    input:focus { outline: none; border-color: #E91E8C; }
+  </style>
+</head>
+<body class="font-sans">
+
+  <!-- ── INTRO ─────────────────────────────────────────────────────────────── -->
+  <div id="screen-intro" class="screen active flex-col items-center justify-center px-6 py-20">
+    <div class="max-w-lg w-full text-center">
+      <img src="/logo.png" alt="Arte of Coaching" class="h-10 mx-auto mb-12 opacity-90" />
+
+      <p class="text-pink text-xs font-bold uppercase tracking-widest mb-4">Free Coaching Assessment</p>
+      <h1 class="text-white text-3xl sm:text-4xl font-extrabold leading-tight mb-5">
+        Is Your Kids BJJ Program Keeping Them — or Losing Them?
+      </h1>
+      <p class="text-gray-400 text-base sm:text-lg leading-relaxed mb-10">
+        Answer 17 questions about your program. Claude will analyse every area and send you a personalised breakdown of exactly where to improve — and how.
+      </p>
+
+      <div class="flex justify-center gap-8 mb-10">
+        <div><p class="text-pink text-2xl font-bold">17</p><p class="text-gray-500 text-xs uppercase tracking-wide mt-1">Questions</p></div>
+        <div><p class="text-gold text-2xl font-bold">4</p><p class="text-gray-500 text-xs uppercase tracking-wide mt-1">Areas</p></div>
+        <div><p class="text-cyan text-2xl font-bold">5 min</p><p class="text-gray-500 text-xs uppercase tracking-wide mt-1">To Complete</p></div>
+      </div>
+
+      <button onclick="startQuiz()" class="w-full sm:w-auto bg-pink hover:bg-opacity-90 text-white font-bold text-lg px-12 py-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-pink/30">
+        Start the Assessment →
+      </button>
+      <p class="text-gray-600 text-xs mt-4">Free · AI-powered · Results delivered to your inbox</p>
+    </div>
+  </div>
+
+  <!-- ── QUESTION ───────────────────────────────────────────────────────────── -->
+  <div id="screen-question" class="screen flex-col">
+    <!-- Progress bar -->
+    <div class="w-full bg-gray-800/60 h-1 flex-shrink-0">
+      <div id="progress-fill" class="progress-fill bg-pink h-1" style="width:0%"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-4 flex-shrink-0">
+      <span id="q-counter" class="text-gray-500 text-sm tabular-nums">1 / 17</span>
+      <span id="q-category" class="text-pink text-xs font-bold uppercase tracking-widest">Class Structure</span>
+    </div>
+
+    <!-- Content -->
+    <div class="flex-1 flex flex-col items-center justify-center px-5 py-6">
+      <div class="max-w-xl w-full" id="q-container">
+
+        <h2 id="q-text" class="text-white text-xl sm:text-2xl font-bold leading-snug mb-7 text-center sm:text-left"></h2>
+
+        <div id="q-answers" class="flex flex-col gap-3 mb-7"></div>
+
+        <button id="btn-next" onclick="nextQuestion()"
+          class="hidden w-full bg-pink hover:bg-opacity-90 text-white font-bold text-base py-4 rounded-xl transition-all duration-200">
+          Next →
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EMAIL CAPTURE ──────────────────────────────────────────────────────── -->
+  <div id="screen-email" class="screen flex-col items-center justify-center px-6 py-20">
+    <div class="max-w-md w-full">
+      <div class="w-16 h-16 rounded-full bg-pink/10 flex items-center justify-center mb-6 mx-auto">
+        <svg class="w-8 h-8 text-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+
+      <h2 class="text-white text-2xl sm:text-3xl font-extrabold text-center mb-2">Your analysis is ready.</h2>
+      <p class="text-gray-400 text-center text-sm mb-8 leading-relaxed">
+        Claude will analyse all 4 areas of your program and send you a personalised breakdown — including exactly what to work on.
+      </p>
+
+      <div class="flex flex-col gap-3">
+        <input id="input-name" type="text" placeholder="Your first name"
+          class="w-full bg-gray-800 border-2 border-gray-700 text-white placeholder-gray-500 rounded-xl px-5 py-4 text-base transition-colors" />
+        <input id="input-email" type="email" placeholder="Your email address"
+          class="w-full bg-gray-800 border-2 border-gray-700 text-white placeholder-gray-500 rounded-xl px-5 py-4 text-base transition-colors" />
+        <p id="email-error" class="text-red-400 text-sm hidden px-1">Please enter your name and a valid email address.</p>
+        <button onclick="submitQuiz()"
+          class="w-full bg-pink hover:bg-opacity-90 text-white font-bold text-lg py-4 rounded-xl transition-all duration-200 mt-1">
+          Send My Analysis →
+        </button>
+      </div>
+
+      <p class="text-gray-600 text-xs text-center mt-5">No spam. Unsubscribe any time.</p>
+    </div>
+  </div>
+
+  <!-- ── LOADING ────────────────────────────────────────────────────────────── -->
+  <div id="screen-loading" class="screen flex-col items-center justify-center px-6">
+    <div class="text-center">
+      <div class="w-14 h-14 border-4 border-gray-700 border-t-pink rounded-full spinner mx-auto mb-8"></div>
+      <h2 class="text-white text-xl font-bold mb-3">Analysing your coaching profile…</h2>
+      <p id="loading-msg" class="loading-msg text-gray-400 text-sm">Reading your responses…</p>
+    </div>
+  </div>
+
+  <!-- ── SUCCESS ────────────────────────────────────────────────────────────── -->
+  <div id="screen-success" class="screen flex-col items-center justify-center px-6 py-20">
+    <div class="max-w-md w-full text-center">
+      <div class="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mb-6 mx-auto">
+        <svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <h2 class="text-white text-3xl font-extrabold mb-3">Check your inbox!</h2>
+      <p class="text-gray-400 mb-2">Your personalised BJJ coaching analysis is on its way.</p>
+      <p class="text-gray-500 text-sm mb-10">Don't see it? Check your spam folder and mark it as not spam.</p>
+      <a href="/" class="text-pink hover:underline font-semibold text-sm">← Back to Arte of Coaching</a>
+    </div>
+  </div>
+
+  <!-- ── ERROR ──────────────────────────────────────────────────────────────── -->
+  <div id="screen-error" class="screen flex-col items-center justify-center px-6 py-20">
+    <div class="max-w-md w-full text-center">
+      <div class="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mb-6 mx-auto">
+        <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+      </div>
+      <h2 class="text-white text-2xl font-extrabold mb-3">Something went wrong</h2>
+      <p class="text-gray-400 mb-8">We couldn't process your analysis. Please try again.</p>
+      <button onclick="retrySubmit()" class="bg-pink text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition-all">
+        Try Again
+      </button>
+    </div>
+  </div>
+
+  <!-- ── SCRIPT ─────────────────────────────────────────────────────────────── -->
+  <script>
+    // ── Questions ─────────────────────────────────────────────────────────────
+    const QUESTIONS = [
+      // Category 1: Class Structure
+      {
+        id: 1, category: 'Class Structure',
+        text: 'How long do you spend on warm-ups?',
+        options: [
+          { letter: 'A', text: '5–8 minutes, purposeful and linked to the session', score: 4 },
+          { letter: 'B', text: '8–10 minutes, somewhat related', score: 3 },
+          { letter: 'C', text: '10–15 minutes, mostly generic', score: 2 },
+          { letter: 'D', text: '15+ minutes, random or unfocused', score: 1 },
+        ]
+      },
+      {
+        id: 2, category: 'Class Structure',
+        text: 'How structured is your class flow (warm-up, games, sparring)?',
+        options: [
+          { letter: 'A', text: 'Very structured with clear purpose and transitions', score: 4 },
+          { letter: 'B', text: 'Mostly structured with some gaps', score: 3 },
+          { letter: 'C', text: 'Some structure but inconsistent', score: 2 },
+          { letter: 'D', text: 'No real structure', score: 1 },
+        ]
+      },
+      {
+        id: 3, category: 'Class Structure',
+        text: 'Do your sessions connect from week to week?',
+        options: [
+          { letter: 'A', text: 'Yes, everything builds progressively', score: 4 },
+          { letter: 'B', text: 'Sometimes there\'s a connection', score: 3 },
+          { letter: 'C', text: 'Rarely — sessions feel separate', score: 2 },
+          { letter: 'D', text: 'No connection at all', score: 1 },
+        ]
+      },
+      {
+        id: 4, category: 'Class Structure',
+        text: 'How do you manage transitions between activities?',
+        options: [
+          { letter: 'A', text: 'Smooth and quick — kids stay engaged', score: 4 },
+          { letter: 'B', text: 'Mostly smooth with small delays', score: 3 },
+          { letter: 'C', text: 'Often slow and messy', score: 2 },
+          { letter: 'D', text: 'Transitions kill the flow completely', score: 1 },
+        ]
+      },
+      // Category 2: Engagement
+      {
+        id: 5, category: 'Engagement',
+        text: 'How engaged are your kids during class?',
+        options: [
+          { letter: 'A', text: 'Fully engaged most of the time', score: 4 },
+          { letter: 'B', text: 'Engaged with occasional drop-offs', score: 3 },
+          { letter: 'C', text: 'Often distracted', score: 2 },
+          { letter: 'D', text: 'Hard to keep them focused', score: 1 },
+        ]
+      },
+      {
+        id: 6, category: 'Engagement',
+        text: 'What do you do when kids lose focus?',
+        options: [
+          { letter: 'A', text: 'Adjust the task or constraints immediately', score: 4 },
+          { letter: 'B', text: 'Try to bring energy back verbally', score: 3 },
+          { letter: 'C', text: 'Repeat instructions louder', score: 2 },
+          { letter: 'D', text: 'Ignore it and continue', score: 1 },
+        ]
+      },
+      {
+        id: 7, category: 'Engagement',
+        text: 'How often do kids ask to keep playing a game?',
+        options: [
+          { letter: 'A', text: 'Almost every class', score: 4 },
+          { letter: 'B', text: 'Sometimes', score: 3 },
+          { letter: 'C', text: 'Rarely', score: 2 },
+          { letter: 'D', text: 'Never', score: 1 },
+        ]
+      },
+      {
+        id: 8, category: 'Engagement',
+        text: 'How much decision-making do kids have in class?',
+        options: [
+          { letter: 'A', text: 'High — they explore and solve problems', score: 4 },
+          { letter: 'B', text: 'Some opportunities', score: 3 },
+          { letter: 'C', text: 'Very little', score: 2 },
+          { letter: 'D', text: 'None — fully coach-directed', score: 1 },
+        ]
+      },
+      // Category 3: Skill Development
+      {
+        id: 9, category: 'Skill Development',
+        text: 'How do kids improve in your program?',
+        options: [
+          { letter: 'A', text: 'Through guided discovery and repetition in games', score: 4 },
+          { letter: 'B', text: 'Mix of games and technique', score: 3 },
+          { letter: 'C', text: 'Mostly technique drilling', score: 2 },
+          { letter: 'D', text: 'No clear system', score: 1 },
+        ]
+      },
+      {
+        id: 10, category: 'Skill Development',
+        text: 'When kids make mistakes, what happens?',
+        options: [
+          { letter: 'A', text: 'The task helps them adjust naturally', score: 4 },
+          { letter: 'B', text: 'I give cues to guide them', score: 3 },
+          { letter: 'C', text: 'I correct them step-by-step', score: 2 },
+          { letter: 'D', text: 'I stop the class to fix it', score: 1 },
+        ]
+      },
+      {
+        id: 11, category: 'Skill Development',
+        text: 'How often do kids transfer skills into sparring?',
+        options: [
+          { letter: 'A', text: 'Very often', score: 4 },
+          { letter: 'B', text: 'Sometimes', score: 3 },
+          { letter: 'C', text: 'Rarely', score: 2 },
+          { letter: 'D', text: 'Almost never', score: 1 },
+        ]
+      },
+      {
+        id: 12, category: 'Skill Development',
+        text: 'How do you teach new skills?',
+        options: [
+          { letter: 'A', text: 'Through games and constraints', score: 4 },
+          { letter: 'B', text: 'Demonstration + practice', score: 3 },
+          { letter: 'C', text: 'Step-by-step drilling', score: 2 },
+          { letter: 'D', text: 'Long explanations', score: 1 },
+        ]
+      },
+      {
+        id: 13, category: 'Skill Development',
+        text: 'How do you know kids are improving?',
+        options: [
+          { letter: 'A', text: 'Clear behavioural changes in live situations', score: 4 },
+          { letter: 'B', text: 'Some visible improvement', score: 3 },
+          { letter: 'C', text: 'Hard to tell', score: 2 },
+          { letter: 'D', text: 'No real measurement', score: 1 },
+        ]
+      },
+      // Category 4: Parent Experience
+      {
+        id: 14, category: 'Parent Experience',
+        text: 'How do parents perceive your program?',
+        options: [
+          { letter: 'A', text: 'They clearly see value and progress', score: 4 },
+          { letter: 'B', text: 'They\'re generally happy', score: 3 },
+          { letter: 'C', text: 'Mixed feedback', score: 2 },
+          { letter: 'D', text: 'Unsure or disengaged', score: 1 },
+        ]
+      },
+      {
+        id: 15, category: 'Parent Experience',
+        text: 'How often do you communicate with parents?',
+        options: [
+          { letter: 'A', text: 'Regular updates and communication', score: 4 },
+          { letter: 'B', text: 'Occasional updates', score: 3 },
+          { letter: 'C', text: 'Rarely', score: 2 },
+          { letter: 'D', text: 'Almost never', score: 1 },
+        ]
+      },
+      {
+        id: 16, category: 'Parent Experience',
+        text: 'How confident are parents in your coaching?',
+        options: [
+          { letter: 'A', text: 'Very confident', score: 4 },
+          { letter: 'B', text: 'Mostly confident', score: 3 },
+          { letter: 'C', text: 'Some doubts', score: 2 },
+          { letter: 'D', text: 'Low confidence', score: 1 },
+        ]
+      },
+      {
+        id: 17, category: 'Parent Experience',
+        text: 'How often do parents refer others to your program?',
+        options: [
+          { letter: 'A', text: 'Frequently', score: 4 },
+          { letter: 'B', text: 'Occasionally', score: 3 },
+          { letter: 'C', text: 'Rarely', score: 2 },
+          { letter: 'D', text: 'Never', score: 1 },
+        ]
+      },
+    ];
+
+    // ── State ─────────────────────────────────────────────────────────────────
+    let state = {
+      currentQ: 0,
+      answers: [],
+      lastName: '',
+      lastEmail: '',
+    };
+    let loadingInterval = null;
+
+    // ── Screens ───────────────────────────────────────────────────────────────
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    // ── Quiz start ────────────────────────────────────────────────────────────
+    function startQuiz() {
+      state.currentQ = 0;
+      state.answers = [];
+      renderQuestion();
+      showScreen('screen-question');
+    }
+
+    // ── Render question ───────────────────────────────────────────────────────
+    function renderQuestion() {
+      const q = QUESTIONS[state.currentQ];
+      const total = QUESTIONS.length;
+
+      document.getElementById('progress-fill').style.width = (state.currentQ / total * 100) + '%';
+      document.getElementById('q-counter').textContent = (state.currentQ + 1) + ' / ' + total;
+      document.getElementById('q-category').textContent = q.category;
+      document.getElementById('q-text').textContent = q.text;
+
+      const container = document.getElementById('q-answers');
+      container.innerHTML = '';
+
+      const existing = state.answers.find(a => a.questionId === q.id);
+
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'answer-btn w-full flex items-start gap-4 bg-gray-800/80 border-2 border-gray-700/80 rounded-xl px-5 py-4 text-left cursor-pointer';
+        btn.onclick = () => selectAnswer(i);
+        btn.innerHTML =
+          '<span class="letter-badge flex-shrink-0 w-8 h-8 rounded-lg bg-gray-700 text-gray-300 text-sm font-bold flex items-center justify-center transition-colors">' + opt.letter + '</span>' +
+          '<span class="text-gray-200 text-sm sm:text-base leading-relaxed">' + opt.text + '</span>';
+
+        if (existing && existing.letter === opt.letter) {
+          btn.classList.add('selected');
+        }
+        container.appendChild(btn);
+      });
+
+      // Animate
+      const qc = document.getElementById('q-container');
+      qc.classList.remove('fade-in');
+      void qc.offsetWidth;
+      qc.classList.add('fade-in');
+
+      // Next button
+      const nextBtn = document.getElementById('btn-next');
+      if (existing) nextBtn.classList.remove('hidden');
+      else nextBtn.classList.add('hidden');
+    }
+
+    // ── Select answer ─────────────────────────────────────────────────────────
+    function selectAnswer(optionIndex) {
+      const q = QUESTIONS[state.currentQ];
+      const opt = q.options[optionIndex];
+
+      document.querySelectorAll('.answer-btn').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      document.querySelectorAll('.answer-btn')[optionIndex].classList.add('selected');
+
+      const answer = {
+        questionId: q.id,
+        questionText: q.text,
+        letter: opt.letter,
+        text: opt.text,
+        score: opt.score,
+        category: q.category,
+      };
+      const idx = state.answers.findIndex(a => a.questionId === q.id);
+      if (idx >= 0) state.answers[idx] = answer;
+      else state.answers.push(answer);
+
+      document.getElementById('btn-next').classList.remove('hidden');
+    }
+
+    // ── Next question ─────────────────────────────────────────────────────────
+    function nextQuestion() {
+      if (state.currentQ < QUESTIONS.length - 1) {
+        state.currentQ++;
+        renderQuestion();
+      } else {
+        showScreen('screen-email');
+      }
+    }
+
+    // ── Submit ────────────────────────────────────────────────────────────────
+    async function submitQuiz() {
+      const name = document.getElementById('input-name').value.trim();
+      const email = document.getElementById('input-email').value.trim();
+      const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+      if (!name || !validEmail) {
+        document.getElementById('email-error').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('email-error').classList.add('hidden');
+
+      state.lastName = name;
+      state.lastEmail = email;
+
+      showScreen('screen-loading');
+      startLoadingMessages();
+
+      try {
+        const res = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, answers: state.answers }),
+        });
+
+        clearInterval(loadingInterval);
+
+        if (res.ok) showScreen('screen-success');
+        else showScreen('screen-error');
+      } catch (err) {
+        clearInterval(loadingInterval);
+        showScreen('screen-error');
+      }
+    }
+
+    // ── Retry ─────────────────────────────────────────────────────────────────
+    function retrySubmit() {
+      document.getElementById('input-name').value = state.lastName;
+      document.getElementById('input-email').value = state.lastEmail;
+      showScreen('screen-email');
+    }
+
+    // ── Loading messages ──────────────────────────────────────────────────────
+    function startLoadingMessages() {
+      const messages = [
+        'Reading your responses…',
+        'Identifying your coaching patterns…',
+        'Building your personalised analysis…',
+        'Almost ready…',
+      ];
+      let i = 0;
+      const el = document.getElementById('loading-msg');
+      el.textContent = messages[0];
+      el.style.opacity = '1';
+      clearInterval(loadingInterval);
+      loadingInterval = setInterval(() => {
+        el.style.opacity = '0';
+        setTimeout(() => {
+          i = (i + 1) % messages.length;
+          el.textContent = messages[i];
+          el.style.opacity = '1';
+        }, 250);
+      }, 2200);
+    }
+  </script>
+</body>
+</html>
