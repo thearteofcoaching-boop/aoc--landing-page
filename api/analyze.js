@@ -171,7 +171,7 @@ module.exports = async function handler(req, res) {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 900,
         messages: [{ role: 'user', content: prompt }],
       }),
