@@ -52,12 +52,13 @@ WRITE THE EMAIL FOLLOWING THIS STRUCTURE (280–320 words):
 2. Acknowledge what's working (${strongest.name}) — 1–2 sentences, make them feel seen but don't over-praise
 3. Call out their biggest gap (${weakest[0].name}, ${weakest[0].pct}%) — reference their actual answers, name the real problem, give 2–3 specific adjustments they can make this week
 4. Address their second gap (${weakest[1].name}, ${weakest[1].pct}%) — same approach, practical and specific
-5. Close with your CTA — the free 15-minute call, naturally, not pushy
+5. Close with your CTA. The free 15-minute discovery call. Natural, not pushy.
 
 Rules:
-- Sound exactly like Ellee talking to a coach — direct, observational, no generic advice
-- Reference their specific answers — not just the category scores
-- Use your phrases naturally where they genuinely fit
+- Sound exactly like Ellee talking to a coach. Direct, observational, no generic advice.
+- Reference their specific answers. Not just the category scores.
+- Use your phrases naturally where they genuinely fit.
+- Never use em dashes (the — symbol). Use a period or comma instead.
 - No subject line. No sign-off. Email body only.
 - Start with: "Hi ${name},"`;
 
@@ -118,8 +119,8 @@ function buildEmailHTML(name, analysisText, categoryResults) {
     <!-- CTA -->
     <tr><td style="background:#0D1B2A;padding:32px;text-align:center;">
       <p style="margin:0 0 18px;color:#9ca3af;font-size:14px;">Ready to take your kids program to the next level?</p>
-      <a href="https://arteofcoaching.com/mentorship" style="display:inline-block;background:#E91E8C;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:700;font-size:16px;">
-        Book a Free Strategy Call →
+      <a href="https://stan.store/thearteofcoaching/p/book-a-free-discovery-call-svoynj4b" style="display:inline-block;background:#E91E8C;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:700;font-size:16px;">
+        Book a Free Discovery Call
       </a>
     </td></tr>
 
