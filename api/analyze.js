@@ -1,4 +1,5 @@
 const { Resend } = require('resend');
+const ELLEE_VOICE = require('./ellee-voice');
 
 const CATEGORY_MAX = {
   'Class Structure': 16,
@@ -27,30 +28,39 @@ function buildPrompt(name, categoryResults) {
     return `${header}\n${qs}`;
   }).join('\n\n---\n\n');
 
-  return `You are an expert BJJ kids coaching mentor with years of experience helping coaches build better programs for children. A coach named ${name} just completed a self-assessment of their kids program.
+  return `${ELLEE_VOICE}
 
-Write them a personalised, insightful email that identifies exactly where they're struggling and gives them specific, actionable steps to improve. Be direct, warm, and expert — like a trusted mentor who has reviewed hundreds of programs.
+---
+
+NOW WRITE THE FEEDBACK EMAIL FOR THIS COACH
+
+Coach name: ${name}
 
 ASSESSMENT SCORES:
 ${categoryResults.map(c => `• ${c.name}: ${c.pct}% — ${scoreLabel(c.pct)}`).join('\n')}
 
-Strongest area: ${strongest.name} (${strongest.pct}%)
-Biggest opportunities: ${weakest.map(w => `${w.name} (${w.pct}%)`).join(' and ')}
+Their strongest area: ${strongest.name} (${strongest.pct}%)
+Their biggest gaps: ${weakest.map(w => `${w.name} (${w.pct}%)`).join(' and ')}
 
-THEIR DETAILED ANSWERS:
+THEIR ANSWERS IN DETAIL:
 ${detailedAnswers}
 
-Write a personalised coaching email (280–340 words) structured as follows:
-1. Open warmly using their name — 1 sentence
-2. Acknowledge their strongest area (${strongest.name}) briefly — 1–2 sentences that make them feel seen
-3. Dig into their weakest area (${weakest[0].name}, ${weakest[0].pct}%): reference their specific answers, name the real problem, give 2–3 concrete steps they can take this week
-4. Address their second weak area (${weakest[1].name}, ${weakest[1].pct}%): same — specific to what they answered, practical next steps
-5. Close with encouragement and a natural (not pushy) invitation to get coaching support
+---
 
-Tone: knowledgeable mentor who coaches for a living. Honest, warm, specific. No generic advice — everything must connect to their actual answers.
+WRITE THE EMAIL FOLLOWING THIS STRUCTURE (280–320 words):
+1. Open with their name — 1 direct sentence, no fluff
+2. Acknowledge what's working (${strongest.name}) — 1–2 sentences, make them feel seen but don't over-praise
+3. Call out their biggest gap (${weakest[0].name}, ${weakest[0].pct}%) — reference their actual answers, name the real problem, give 2–3 specific adjustments they can make this week
+4. Address their second gap (${weakest[1].name}, ${weakest[1].pct}%) — same approach, practical and specific
+5. Close with your CTA — the free 15-minute call, naturally, not pushy
 
-Start with: "Hi ${name},"
-Email body only. No subject line. No closing signature.`;
+Rules:
+- Sound exactly like Ellee talking to a coach — direct, observational, no generic advice
+- Reference their specific answers — not just the category scores
+- Use your phrases naturally where they genuinely fit
+- No subject line. No sign-off. Email body only.
+- Start with: "Hi ${name},"`;
+
 }
 
 function buildEmailHTML(name, analysisText, categoryResults) {
